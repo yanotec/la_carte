@@ -1,0 +1,7 @@
+*~
+coverage/*
+.bundle
+rdoc/*
+pkg
+log
+test/tmp/*
