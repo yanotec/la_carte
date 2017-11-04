@@ -10,10 +10,12 @@ class LaCarte::TestCase < TEST_CASE
   def setup
     super
     Thread.current[:la_carte_config] = nil
+    Thread.current[:la_carte_store] = nil
   end
 
   def teardown
     Thread.current[:la_carte_config] = nil
+    Thread.current[:la_carte_store] = nil
     super
   end
 
@@ -24,6 +26,14 @@ class LaCarte::TestCase < TEST_CASE
       klass.public_send(method)
     end
     assert_includes klass.private_methods, method
+  end
+
+  def store
+    LaCarte::Store.store
+  end
+
+  def stored_data
+    store.send(:stored_data)
   end
 
   def config

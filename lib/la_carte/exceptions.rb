@@ -34,4 +34,20 @@ module LaCarte
       super message
     end
   end
+
+  class UnknownSourcePathException < Exception
+    def initialize(source, message = nil)
+      message ||= "undefined source_path `#{source}` for LaCarte.configure"
+
+      super message
+    end
+  end
+
+  class InvalidSintaxDataException < Exception
+    def initialize(filename, message = nil)
+      message ||= "(#{filename}) expects it returns a hash, but did not occur."
+
+      super message
+    end
+  end
 end
