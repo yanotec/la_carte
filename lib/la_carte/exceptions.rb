@@ -50,4 +50,35 @@ module LaCarte
       super message
     end
   end
+
+  class NoModuleException < Exception
+    def initialize(message = nil)
+      message ||= "Expected to receive a module."
+
+      super message
+    end
+  end
+
+  class DuplicityBuilderException < Exception
+    def initialize(builder, message = nil)
+      message ||= "Builder #{builder} has already been added to the list"
+
+      super message
+    end
+  end
+
+  class NoSourceException < Exception
+    def initialize(source, message = nil)
+      message ||= "The source (#{source}) was not found. Verify that the source is correct or defined."
+      super message
+    end
+  end
+
+  class RequiredFieldException < Exception
+    def initialize(field, message = nil)
+      message ||= "The field (#{field}) is_required."
+
+      super message
+    end
+  end
 end

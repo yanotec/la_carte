@@ -1,0 +1,7 @@
+---
+items:
+- name: level1
+  url: "/"
+  items:
+  - name: level2
+    url: "/"

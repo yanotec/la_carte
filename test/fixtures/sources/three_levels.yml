@@ -1,0 +1,17 @@
+---
+items:
+- name: level1.1
+  url: "/level1.1"
+- name: level1.2
+  url: "/level1.2"
+  items:
+  - name: level2.1
+    url: "/level2.1"
+- name: level1.3
+  url: "/level1.3"
+  items:
+  - name: level2.2
+    url: "/level2.2"
+    items:
+    - name: level3.1
+      url: "/level3.1"
