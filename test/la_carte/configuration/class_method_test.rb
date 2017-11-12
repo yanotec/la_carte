@@ -6,17 +6,17 @@ class LaCarte::Configuration::ClassMethodTest < LaCarte::TestCase
   end
 
   def test_configure_require_block_yields
-    assert_raises LocalJumpError do
+    assert_raises ArgumentError do
       LaCarte::Configuration.configure
     end
   end
 
   def test_configure_to_call_instance_method
     instance = Minitest::Mock.new
-    instance.expect :call, instance, []
+    instance.expect :configure, instance, []
 
     LaCarte::Configuration.stub :instance, instance do
-      LaCarte.configure {|_| }
+      LaCarte::Configuration.configure { }
     end
 
     assert instance.verify

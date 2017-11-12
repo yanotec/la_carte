@@ -3,8 +3,8 @@ module LaCarte
     class << self
       private :new
 
-      def configure
-        yield instance
+      def configure(&block)
+        instance.configure(&block)
       end
 
       def instance
@@ -16,6 +16,14 @@ module LaCarte
       @load_paths = {}
       @build_processors = []
       @required_fields = {}
+    end
+
+    def configure(&block)
+      instance_eval(&block)
+    end
+
+    def config
+      self
     end
 
     def load_paths(source)

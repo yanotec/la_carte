@@ -2,25 +2,21 @@ require "test_helper"
 
 class LaCarteTest < LaCarte::TestCase
   def test_configure_block_required
-    assert_raises LocalJumpError do
+    assert_raises ArgumentError do
       LaCarte.configure
     end
   end
 
   def test_configure_block_yields_configuration_class_instance
-    LaCarte.configure do |config|
-      assert_instance_of LaCarte::Configuration, config
+    context = self
+    LaCarte.configure do
+      context.assert_instance_of LaCarte::Configuration, config
     end
   end
 
   def test_config_to_call_instance_in_configuration_class
-    instance = Minitest::Mock.new
-    instance.expect :call, instance, []
-
-    LaCarte::Configuration.stub :instance, instance do
-      LaCarte.config
+    LaCarte::Configuration.stub :instance, "instance" do
+      assert_equal "instance", LaCarte.config
     end
-
-    assert instance.verify
   end
 end
