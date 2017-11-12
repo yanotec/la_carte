@@ -19,4 +19,16 @@ class LaCarteTest < LaCarte::TestCase
       assert_equal "instance", LaCarte.config
     end
   end
+
+  def test_render_to_call_renderer_render_method
+    params = lambda do |name, options|
+      # We're making sure that the correct arguments are passed along
+      assert_equal 'menu', name
+      assert_equal({ params: 'params' }, options)
+    end
+
+    LaCarte::Renderer.stub :render, params do
+      LaCarte.render 'menu', params: 'params'
+    end
+  end
 end

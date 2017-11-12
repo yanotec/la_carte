@@ -7,6 +7,7 @@ module LaCarte
   autoload :Configuration, 'la_carte/configuration'
   autoload :Store,         'la_carte/store'
   autoload :Builder,       'la_carte/builder'
+  autoload :Renderer,      'la_carte/renderer'
 
   # Default way to configure LaCarte.
   def self.configure(&block)
@@ -15,5 +16,9 @@ module LaCarte
 
   def self.config
     Configuration.instance
+  end
+
+  def self.render(*args)
+    LaCarte::Renderer.render(*args)
   end
 end
