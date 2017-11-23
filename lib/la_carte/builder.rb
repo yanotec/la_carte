@@ -20,8 +20,8 @@ module LaCarte
       @data = {}
     end
 
-    def build(name, options = nil)
-      options = options.nil? ? {} : options.dup
+    def build(name, opts = nil)
+      options = opts.nil? ? {} : opts.dup
 
       force_reload = options.delete(:force_reload) || false
       source  = options.delete(:source) || name
