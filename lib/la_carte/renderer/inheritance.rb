@@ -4,6 +4,16 @@ module LaCarte
       extend LaCarte::Support::Concern
 
       module ClassMethods
+        # Determines if it initializes an
+        # instance of the given subclass instead of the base class.
+        def new(*args, &block)
+          if self == Base
+            raise NotImplementedError, "#{self} is an abstract class and cannot be instantiated."
+          end
+
+          super
+        end
+
         # Returns the class descending directly from LaCarte::Renderer::Base,
         # if any, in the inheritance hierarchy.
         #

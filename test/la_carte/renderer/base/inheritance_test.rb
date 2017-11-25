@@ -10,7 +10,7 @@ class LaCarte::Renderer::Base::InheritanceTest < LaCarte::TestCase
     end
   end
 
-  def test_base_class_activerecord_error
+  def test_base_class_renderer_error
     klass = Class.new { include LaCarte::Renderer::Inheritance }
     assert_raises LaCarte::RendererError do
       klass.base_class
@@ -29,5 +29,12 @@ class LaCarte::Renderer::Base::InheritanceTest < LaCarte::TestCase
     assert_equal 'base_class', LaCarte::Renderer::Base.class_name
     assert_equal 'menu_test', MenuTestRenderer.class_name
     assert_equal 'sub_menu_test', SubMenuTestRenderer.class_name
+  end
+
+  def test_new_with_ar_base
+    e = assert_raises(NotImplementedError) do
+      LaCarte::Renderer::Base.new
+    end
+    assert_equal("LaCarte::Renderer::Base is an abstract class and cannot be instantiated.", e.message)
   end
 end
