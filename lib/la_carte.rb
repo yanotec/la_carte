@@ -1,5 +1,6 @@
 require "la_carte/version"
 require "la_carte/exceptions"
+require "i18n"
 
 module LaCarte
   ALLOWED_TYPES = %w(.yml .rb).freeze
