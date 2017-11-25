@@ -9,16 +9,15 @@ TEST_CASE = defined?(Minitest::Test) ? Minitest::Test : MiniTest::Unit::TestCase
 class LaCarte::TestCase < TEST_CASE
   def setup
     super
-    Thread.current[:la_carte_config] = nil
-    Thread.current[:la_carte_store] = nil
-    Thread.current[:la_carte_builder] = nil
   end
 
   def teardown
-    Thread.current[:la_carte_config] = nil
-    Thread.current[:la_carte_store] = nil
-    Thread.current[:la_carte_builder] = nil
     super
+    Thread.current.keys.each do |key|
+      next if key.to_s !~ /\Ala_carte_/
+
+      Thread.current[key] = nil
+    end
   end
 
   private

@@ -1,6 +1,8 @@
 module LaCarte
   module Renderer
     autoload :Base, 'la_carte/renderer/base'
+    autoload :Pattern, 'la_carte/renderer/pattern'
+    autoload :Definition, 'la_carte/renderer/definition'
     autoload :Inheritance, 'la_carte/renderer/inheritance'
     autoload :Translation, 'la_carte/renderer/translation'
 
