@@ -1,5 +1,11 @@
 module LaCarte
   module Support
+    module Concern
+      def included(base)
+        base.extend const_get(:ClassMethods) if const_defined?(:ClassMethods)
+      end
+    end
+
     extend self
 
     def camelize(term, uppercase_first_letter = true)
@@ -42,6 +48,26 @@ module LaCarte
           # owner is in Object, so raise
           constant.const_get(name, false)
         end
+      end
+    end
+
+    def underscore(camel_cased_word)
+      return camel_cased_word unless /[A-Z-]|::/.match?(camel_cased_word)
+      word = camel_cased_word.to_s.gsub("::".freeze, "/".freeze)
+      word.gsub!(/(?:(?<=([A-Za-z\d]))|\b)((?-mix:(?=a)b))(?=\b|[^a-z])/) { "#{$1 && '_'.freeze }#{$2.downcase}" }
+      word.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2'.freeze)
+      word.gsub!(/([a-z\d])([A-Z])/, '\1_\2'.freeze)
+      word.tr!("-".freeze, "_".freeze)
+      word.downcase!
+      word
+    end
+
+    def demodulize(path)
+      path = path.to_s
+      if i = path.rindex("::")
+        path[(i + 2)..-1]
+      else
+        path
       end
     end
   end

@@ -1,6 +1,7 @@
 module LaCarte
   module Renderer
     autoload :Base, 'la_carte/renderer/base'
+    autoload :Inheritance, 'la_carte/renderer/inheritance'
 
     def self.render(name, opts = nil)
       options = (opts.nil? ? {} : opts.dup)

@@ -1,6 +1,8 @@
 module LaCarte
   class Exception < ::RuntimeError; end
 
+  class RendererError < Exception; end
+
   class DuplicitySourceException < Exception
     def initialize(source, message = nil)
       message ||= "The source (#{source}) has already been added. Verify that the source is correct."
