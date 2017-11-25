@@ -62,6 +62,24 @@ module LaCarte
       word
     end
 
+    def humanize(lower_case_and_underscored_word, options = {})
+      result = lower_case_and_underscored_word.to_s.dup
+
+      result.sub!(/\A_+/, "".freeze)
+      result.sub!(/_id\z/, "".freeze)
+      result.tr!("_".freeze, " ".freeze)
+
+      result.gsub!(/([a-z\d]*)/i) do |match|
+        "#{match.downcase}"
+      end
+
+      if options.fetch(:capitalize, true)
+        result.sub!(/\A\w/) { |match| match.upcase }
+      end
+
+      result
+    end
+
     def demodulize(path)
       path = path.to_s
       if i = path.rindex("::")
