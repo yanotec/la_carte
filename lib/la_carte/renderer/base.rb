@@ -5,7 +5,11 @@ module LaCarte
       include Definition
       extend Translation
 
-      def self.render
+      def self.render(*args)
+        new(*args).render
+      end
+
+      def render
       end
     end
   end
