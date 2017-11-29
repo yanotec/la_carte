@@ -3,12 +3,6 @@ require 'test_helper'
 class MenuTestRenderer < LaCarte::Renderer::Base; end
 
 class LaCarte::Renderer::Base::DefinitionTest < LaCarte::TestCase
-  def test_exception_raised_when_define_pattern_without_block
-    assert_raises ArgumentError do
-      LaCarte::Renderer::Base.define_pattern
-    end
-  end
-
   def test_define_pattern_build_a_renderer_pattern
     instance = Minitest::Mock.new
     instance.expect :build, instance

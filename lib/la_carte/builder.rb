@@ -4,8 +4,8 @@ module LaCarte
     autoload :ProcessorPlugin, 'la_carte/builder/processor_plugin'
 
     class << self
-      def build(name, options = nil)
-        instance.build(name, options)
+      def build(*args)
+        instance.build(*args)
       end
 
       private :new

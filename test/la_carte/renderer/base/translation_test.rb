@@ -33,10 +33,6 @@ class LaCarte::Renderer::Base::TranslationTest < LaCarte::TestCase
     assert_equal :sub_menu_test, SubMenuTestRenderer.i18n_key
   end
 
-
-
-
-
   def test_translated_renderer_text
     I18n.backend.store_translations "en", la_carte: { renderer: { menu_test: { home: "Home Menu" } } }
     assert_equal "Home Menu", MenuTestRenderer.human("home")
