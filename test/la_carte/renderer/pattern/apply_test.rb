@@ -80,6 +80,164 @@ class LaCarte::Renderer::Pattern::ApplyTest < LaCarte::TestCase
     )
   end
 
+  def test_apply_pattern_with_simple_conditions
+    instance.build do
+      set :base do
+        div class: :base do
+          use :items
+        end
+      end
+
+      set :items do
+        span { "Name" }
+        ul { use :item }
+      end
+
+      set :item, :selected, conditions: { selected: true } do
+        li do
+          a href: :url do
+            :name
+          end
+        end
+      end
+    end
+
+    assert_equal(
+      [
+        { tag: :div, attributes: { class: 'base' }, content: [
+          { tag: :span, content: [ "Name" ] },
+          { tag: :ul, content: [
+            { tag: :li, content: [
+              { tag: :a, attributes: { href: '#' }, content: ['level1.3']}
+            ] }
+          ] }
+        ] }
+      ],
+      instance.apply(data)
+    )
+  end
+
+  def test_apply_pattern_with_has_conditions
+    instance.build do
+      set :base do
+        div class: :base do
+          use :items
+        end
+      end
+
+      set :items do
+        span { "Name" }
+        ul { use :item }
+      end
+
+      set :subitems do
+        ul { use :item }
+      end
+
+      set :item, :subitems, conditions: { has: :items } do
+        li do
+          a href: :url do
+            :name
+          end
+          use :subitems
+        end
+      end
+    end
+
+    assert_equal(
+      [
+        { tag: :div, attributes: { class: 'base' }, content: [
+          { tag: :span, content: [ "Name" ] },
+          { tag: :ul, content: [
+            { tag: :li, content: [
+              { tag: :a, attributes: { href: '#' }, content: ['level1.2'] },
+              { tag: :ul, content: [] }
+            ] },
+            { tag: :li, content: [
+              { tag: :a, attributes: { href: '#' }, content: ['level1.3'] },
+              { tag: :ul, content: [
+                { tag: :li, content: [
+                  { tag: :a, attributes: { href: '#' }, content: ['level2.2'] },
+                  { tag: :ul, content: [] }
+                ] }
+              ] }
+            ] }
+          ] }
+        ] }
+      ],
+      instance.apply(data)
+    )
+  end
+
+  def test_apply_pattern_with_reference_conditions
+    instance.build do
+      set :base do
+        div class: :base do
+          span { "Name" }
+          use :items
+        end
+      end
+
+      set :items do
+        ul { use :item }
+      end
+
+      set :item, :selected, conditions: { selected: true } do
+        li class: 'selected' do
+          a href: :url do
+            :name
+          end
+        end
+      end
+
+      set :item, :subitems, conditions: { has: :items } do
+        li do
+          a href: :url do
+            :name
+          end
+          use :items
+        end
+      end
+
+      set :item, :opened, conditions: [:selected, :subitems] do
+        li class: 'opened' do
+          a href: :url do
+            :name
+          end
+          use :items
+        end
+      end
+    end
+
+    assert_equal(
+      [
+        { tag: :div, attributes: { class: 'base' }, content: [
+          { tag: :span, content: [ "Name" ] },
+          { tag: :ul, content: [
+            { tag: :li, content: [
+              { tag: :a, attributes: { href: '#' }, content: ['level1.2'] },
+              { tag: :ul, content: [] }
+            ] },
+            { tag: :li, attributes: { class: 'opened' }, content: [
+              { tag: :a, attributes: { href: '#' }, content: ['level1.3'] },
+              { tag: :ul, content: [
+                { tag: :li, attributes: { class: 'opened' }, content: [
+                  { tag: :a, attributes: { href: '#' }, content: ['level2.2'] },
+                  { tag: :ul, content: [
+                    { tag: :li, attributes: { class: 'selected' }, content: [
+                      { tag: :a, attributes: { href: '/level3.1' }, content: ['level3.1'] },
+                    ] }
+                  ] }
+                ] }
+              ] }
+            ] }
+          ] }
+        ] }
+      ],
+      instance.apply(data)
+    )
+  end
+
   private
 
   def instance(*args)

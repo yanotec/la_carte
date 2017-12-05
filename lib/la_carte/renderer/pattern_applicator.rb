@@ -10,7 +10,7 @@ module LaCarte
 
       def apply_definitions(item, type)
         if type == :item
-          item[:items].collect do |subitem|
+          (item[:items] || []).collect do |subitem|
             apply_content subitem, get_content(type, subitem)
           end
         else
@@ -26,6 +26,37 @@ module LaCarte
         return content if content.is_a? Hash
 
         definition.each do |_, pattern|
+          if (pre_conditions = pattern[:conditions])
+            all_conditions = case pre_conditions
+                             when Hash then
+                               [pre_conditions]
+                             when Array then # relations
+                               pre_conditions.map do |relation|
+                                 next relation if relation.is_a? Hash
+                                 next {} unless relation.is_a? Symbol
+                                 next nil if relation == :all
+
+                                 definition[relation][:conditions] || {}
+                               end
+                             else
+                               []
+                             end
+
+            next unless all_conditions.all? do |conditions|
+              next true if conditions.nil? # relation == :all
+
+              conditions.all? do |key, value|
+                if key == :has
+                  item.has_key?(value) && not(item[value].nil?)
+                elsif value.is_a?(Array)
+                  value.include?(item[key])
+                else
+                  item[key] == value
+                end
+              end
+            end
+          end
+
           content = pattern[:content]
         end
 
@@ -57,9 +88,9 @@ module LaCarte
                                 has_subitems = item[:items] && item[:items].any?
                                 attrs[k] = if v == :url && has_subitems
                                              '#'
-                                             else
-                                               apply_value(item, v)
-                                             end
+                                           else
+                                             apply_value(item, v)
+                                           end
                               end
 
                               element[key] = attrs
