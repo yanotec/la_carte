@@ -7,6 +7,10 @@ TEST_CASE = defined?(Minitest::Test) ? Minitest::Test : MiniTest::Unit::TestCase
 
 
 class LaCarte::TestCase < TEST_CASE
+  def self.test_order
+    Thread.current[:to] ||= [:random, :parallel, :alpha, :sorted].sample
+  end
+
   def setup
     super
   end
@@ -57,3 +61,5 @@ class LaCarte::TestCase < TEST_CASE
     Pathname.new(File.dirname(__FILE__)).join('fixtures', 'sources')
   end
 end
+
+p LaCarte::TestCase.test_order

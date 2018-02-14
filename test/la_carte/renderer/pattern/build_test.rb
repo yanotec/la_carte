@@ -121,7 +121,6 @@ class LaCarte::Renderer::Pattern::BuildTest < LaCarte::TestCase
       end
     end
 
-
     assert_equal(
       {
         base: { all: { content: [ { tag: :div, attributes: { class: 'base' } } ] } },
@@ -378,6 +377,22 @@ class LaCarte::Renderer::Pattern::BuildTest < LaCarte::TestCase
     end
 
     assert_equal "the subpattern :special was not found in :items pattern", e.message
+  end
+
+  def test_exception_raised_when_does_not_call_pattern_defined
+    e = assert_raises LaCarte::RendererError do
+      instance.build do
+        set :base do
+          ul
+        end
+
+        set :items do
+          li
+        end
+      end
+    end
+
+    assert_equal "the pattern :items was not related", e.message
   end
 
   private
